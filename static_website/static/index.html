@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <link rel='stylesheet' type='text/css' media='screen' href='/static/style.css'>
+        <script src="https://code.highcharts.com/highcharts.js"></script>
+        <script src="https://code.highcharts.com/stock/modules/stock.js"></script>
+        <script src="https://code.highcharts.com/modules/exporting.js"></script>
+        <meta name="author" content="Aayush Kharwal">
+        <meta name="description" content="CSCI571 Assignment 2">
+        <meta name="keywords" content="HTML, CSS, JS, Python, Flask">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Stock Search</title>
+    </head>
+
+    <body>
+        
+        <div id="background_top">
+
+            <form id="form_search_bar">
+                <label for="symbol">
+                    Stock Search
+                </label>
+                <div id="container_search">
+                    <button type="submit">
+                        <img src="/static/images/search-solid.svg">
+                    </button>
+                    <input required id="symbol" autocomplete="off" placeholder="Enter Stock Ticker Symbol" type="search" name="symbol" oninput="this.value = this.value.toUpperCase()">
+                    <button type="reset" onClick="clear_display()">
+                        <img src="/static/images/times-solid.svg">
+                    </button>
+                </div>
+            </form>
+
+        </div>
+
+        <div id="background_bottom">
+
+            <div id="invalid_symbol">
+                Error : No record has been found, please enter a valid symbol
+            </div>
+
+            <div id="valid_symbol">
+            
+                <div id="tab_bar">
+                    <button id="button_company" class="tab active" onclick="open_tab('company')">Company</button>
+                    <button id="button_stock_summary" class="tab" onclick="open_tab('stock_summary')">Stock Summary</button>
+                    <button id="button_charts" class="tab" onclick="open_tab('charts')">Charts</button>
+                    <button id="button_latest_news" class="tab" onclick="open_tab('latest_news')">Latest News</button>
+                </div>
+
+            
+                <div id="tab_window">
+ 
+                    <div id="company">
+                        <div>
+                            <img id="logo" alt="logo">
+                        </div>
+                        <table>
+                            <tr>
+                                <th></th>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <th>Company Name</th>
+                                <td id="name"></td>
+                            </tr>
+                            <tr>
+                                <th>Stock Ticker Symbol</th>
+                                <td id="ticker"></td>
+                            </tr>
+                            <tr>
+                                <th>Stock Exchange Code</th>
+                                <td id="exchange"></td>
+                            </tr>
+                            <tr>
+                                <th>Company Start Date</th>
+                                <td id="ipo"></td>
+                            </tr>
+                            <tr>
+                                <th>Category</th>
+                                <td id="finnhubIndustry"></td>
+                            </tr>
+                        </table>
+                    </div>
+
+                    <div id="stock_summary">
+                        <table>
+                            <tr>
+                                <th></th>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <th>Stock Ticker Symbol</th>
+                                <td id="s"></td>
+                            </tr>
+                            <tr>
+                                <th>Trading Day</th>
+                                <td id="t"></td>
+                            </tr>
+                            <tr>
+                                <th>Previous Closing Price</th>
+                                <td id="pc"></td>
+                            </tr>
+                            <tr>
+                                <th>Opening Price</th>
+                                <td id="o"></td>
+                            </tr>
+                            <tr>
+                                <th>High Price</th>
+                                <td id="h"></td>
+                            </tr>
+                            
+                            <tr>
+                                <th>Low Price</th>
+                                <td id="l"></td>
+                            </tr>
+                            <tr>
+                                <th>Change</th>
+                                <td id="d"></td>
+                            </tr>
+                            <tr>
+                                <th>Change Percentage</th>
+                                <td id="dp"></td>
+                            </tr>
+                        </table> 
+                        <div>
+                            <p>Strong Sell</p>
+                            <p id="strongSell"></p>
+                            <p id="sell"></p>
+                            <p id="hold"></p>
+                            <p id="buy"></p>
+                            <p id="strongBuy"></p>
+                            <p>Strong Buy</p>
+                        </div>
+                        <div>
+                            Recommendation Trends
+                        </div>
+                    </div>
+
+                    <div id="charts">
+                    </div>
+        
+                    <div id="latest_news">
+                        <!-- <div class="card_news">
+                            <div class="news_image">
+                                <img id="image" alt="news_image" src="https://media.zenfs.com/en/insidermonkey.com/d6d8c371600d571d41ea1dcd91f08bc1">
+                            </div>
+                            <div class="news_content">
+                                <p id="headline">Headline</p>
+                                <p id="datetime">datetime</p>
+                                <p><a href="www.google.com">See Original Post</a></p>    
+                            </div>
+                        </div>                          -->
+                    </div>
+
+                </div>
+            
+            </div>   
+        
+        </div>
+
+    <script src="/static/index.js"></script>
+
+    </body>
+</html>
