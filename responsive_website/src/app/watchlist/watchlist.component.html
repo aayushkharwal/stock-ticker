@@ -1,0 +1,27 @@
+<div class="container">
+
+  <h1 class="my-3">My Watchlist</h1>
+    
+  <div *ngIf="spinnerFlag; else dataFetched" class="d-flex justify-content-center">
+      <mat-progress-spinner diameter="50" mode="indeterminate" ></mat-progress-spinner>
+  </div>
+
+  <ng-template #dataFetched>
+    
+    <div *ngIf="watchlistAlert" class="alert alert-warning text-center" role="alert">
+      Currently you don't have any stock in your watchlist.
+    </div>
+
+    <section>
+      <app-watchlist-card 
+      *ngFor="let watchlistedStock of watchlistedStocks" 
+      [watchlistedStock]="watchlistedStock" 
+      (refreshWatchlistedStocks)="refreshWatchlistedStocks($event)"
+      ></app-watchlist-card>
+    </section>
+
+  </ng-template>
+
+</div>
+
+<!-- <app-footer class="fixed-bottom"></app-footer> -->

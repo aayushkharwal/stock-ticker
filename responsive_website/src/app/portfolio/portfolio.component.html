@@ -1,0 +1,34 @@
+<div class="container ">
+
+  <div *ngIf="alertPop" [class]="alertClasses" role="alert">
+    {{alertMessage}}
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+  </div>
+
+  <h1 class="my-3">My Portfolio</h1>
+
+    
+  <div *ngIf="spinnerFlag; else dataFetched" class="d-flex justify-content-center">
+    <mat-progress-spinner diameter="50" mode="indeterminate" ></mat-progress-spinner>
+  </div>
+
+  <ng-template #dataFetched>
+
+    <h4>Money in Wallet: ${{balance.toFixed(2)}}</h4>
+    <div *ngIf="portfolioAlert" class="alert alert-warning text-center" role="alert">
+      Currently you don't have any stock in your portfolio.
+    </div>
+
+    <section>
+      <app-portfolio-card 
+      *ngFor="let portfolioStock of portfolioStocks['stocks']" 
+      [portfolioStock]="portfolioStock" 
+      (refreshPortfolio)="refreshPortfolio($event)"
+      ></app-portfolio-card>
+    </section>
+
+  </ng-template>
+
+</div>
+
+<!-- <app-footer class="fixed-bottom"></app-footer> -->

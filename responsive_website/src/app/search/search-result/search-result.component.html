@@ -1,0 +1,256 @@
+<app-search-bar [ticker]="tickerSymbol"></app-search-bar>
+
+<div class="container ">
+
+  <div *ngIf="spinnerFlag; else dataFetched" class="d-flex justify-content-center">
+    <mat-progress-spinner diameter="50" mode="indeterminate" ></mat-progress-spinner>
+  </div>
+
+    <ng-template #dataFetched>
+
+
+      <div *ngIf="noDataAlert; else elseBlock" class=" alert alert-danger text-center my-5" role="alert">
+        No data found. Please enter a valid Ticker.
+      </div>
+
+      <ng-template #elseBlock>
+
+        <div *ngIf="alertPop" [class]="alertClasses" role="alert">
+          {{alertMessage}}
+          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+
+        <div class="container text-center my-3">
+          <div class="row">
+            <div class="col">
+              <div style="font-size: 25px; font-weight: 600;">{{stockData["profile"]?.ticker}}
+                <span (click)="watchlist()">
+                  <i [style.color]="starIconColor" style="font-size: 20px;" [class]="starIconType"></i>
+                </span>
+              </div>
+              <div class="text-muted" style="font-size: 18px; font-weight: 600;">{{stockData["profile"]?.name}}</div>
+              <div style="font-size: 13px;" class="mb-2">{{stockData["profile"]?.exchange}}</div>
+              <button type="button" class="btn btn-sm btn-success" (click)="openTransactionModal('Buy')">Buy</button>
+              <button type="button" class="btn btn-sm btn-danger ms-2" (click)="openTransactionModal('Sell')"
+                *ngIf="(stockQuantity>0)?true:false">Sell</button>
+            </div>
+            
+            <div class="col col-xs-1 col-md-2">
+              <img [src]="stockData['profile']?.logo" class="img-fluid" alt="logo" style="max-width: 70%">
+            </div>
+            
+            <div class="col">
+              <div [style.color]="caretColor" style="font-weight: 700;">
+                <div style="font-size: 25px; font-weight: 600;">{{liveData["quote"]?.c}}</div>
+                <div style="font-size: 18px; font-weight: 600;"> 
+                  <i [class]="caretType" style="font-size: 16px;"></i>{{liveData["quote"]?.d.toFixed(2)}}({{liveData["quote"]?.dp.toFixed(2)}}%)
+                </div>
+              </div>
+              <div style="font-size: 13px;">{{liveData["quote"]?.t}}</div>
+            </div>
+            
+          </div>
+        </div>
+
+        <div class="alert text-center" role="alert" [style.color]="marketStatusColor">
+          {{marketStatus}}.
+        </div>
+
+        <mat-tab-group dynamicHeight animationDuration="0ms">
+          <mat-tab label="Summary">
+
+            <div class="container">
+              <div class="row">
+
+                <div class="col-md-6 align-self-center">
+  
+                  <div class="row pb-lg-5 pb-3">
+                    <div class="text-lg-start text-center">
+                      <div><strong>High Price:  </strong>{{liveData["quote"]?.h.toFixed(2)}}</div>
+                      <div><strong>Low Price:    </strong>{{liveData["quote"]?.l.toFixed(2)}}</div>
+                      <div><strong>Open Price:  </strong>{{liveData["quote"]?.o.toFixed(2)}}</div>
+                      <div><strong>Prev. Close: </strong>{{liveData["quote"]?.pc.toFixed(2)}}</div>
+                    </div>
+                    <!-- <table class="table table-bordered" style="border: 1px solid yellow;">
+                      <tbody>
+                        <tr>
+                          <th>High Price:</th>
+                          <td>{{liveData["quote"]?.h.toFixed(2)}}</td>
+                        </tr>
+                        <tr>
+                          <th>Low Price:</th>
+                          <td>{{liveData["quote"]?.l.toFixed(2)}}</td>
+                        </tr>
+                        <tr>
+                          <th>Open Price</th>
+                          <td>{{liveData["quote"]?.o.toFixed(2)}}</td>
+                        </tr>
+                        <tr>
+                          <th>Prev. Close</th>
+                          <td>{{liveData["quote"]?.pc.toFixed(2)}}</td>
+                        </tr>
+                      </tbody>
+                    </table> -->
+                  </div>
+
+                  <div class="row text-center">
+                    <h4><u>About the company</u></h4>
+                    <div class="my-1"><strong>IPO Start Date:</strong> {{stockData["profile"]?.ipo}}</div>
+                    <div class="my-1"><strong>Industry:</strong> {{stockData["profile"]?.finnhubIndustry}}</div>
+                    <div class="my-1"><strong>Webpage: </strong><a target="_blank" [href]="stockData['profile']?.weburl">{{stockData["profile"]?.weburl}}</a></div>
+                    <div class="my-1"><strong>Company peers:</strong>
+                      <br>
+                      <span *ngFor="let peer of stockData['peers']">&nbsp;
+                        <a target="_blank" [routerLink]="['/search', peer]">{{peer}},</a>
+                      </span>
+                    </div>
+                  </div>
+
+                </div>
+
+                <div class="col-md-6 my-3">
+                  <!-- Graph -->
+
+                  <div *ngIf="priceChartAvailable; else priceChartMissing">
+                    <highcharts-chart [Highcharts]="Highcharts" [options]="priceChartOptions"
+                    style="width: 100%; height: 400px; display: block;"
+                    ></highcharts-chart>
+                    </div>
+                  <ng-template else #priceChartMissing>
+                      <div class=" alert alert-danger text-center my-5" role="alert">
+                        Price Chart API has exceeded max requests.
+                      </div>
+                    </ng-template>
+        
+                </div>
+
+              </div>
+            </div>
+
+          </mat-tab>
+          
+          
+          <!-- TODO: styling -->
+          <mat-tab label="Top News">
+
+            <div class="container my-3">
+              <div class="row">
+                <div class="col-md-6 my-2" *ngFor="let newsCardData of newsData; let i = index">
+                  <app-news-card [newsCardData]="newsCardData"></app-news-card>
+                </div>
+              </div>
+
+              <!-- <mat-grid-list cols="2" rowHeight="200px">
+                <mat-grid-tile *ngFor="let newsCardData of newsData" class="col-sm-12 col-md-6 col-lg-6 mb-3">
+                  <div class="row">
+                    <app-news-card [newsCardData]="newsCardData"></app-news-card>
+                  </div>
+                </mat-grid-tile>
+              </mat-grid-list> -->
+
+            </div>
+
+
+          </mat-tab>
+          
+          <mat-tab label="Charts">
+            <div *ngIf="smaChartAvailable; else smaChartMissing">
+            <highcharts-chart 
+              [Highcharts]="Highcharts" 
+              [options]="smaChartOptions"
+              style="width: 100%; height: 400px; display: block;"
+              >
+            </highcharts-chart>
+            </div>
+          <ng-template else #smaChartMissing>
+              <div class=" alert alert-danger text-center my-5" role="alert">
+                SMA Chart API has exceeded max requests.
+              </div>
+            </ng-template>
+
+          </mat-tab>
+
+          <mat-tab label="Insights">
+            <div class="container text-center my-3">
+              <!-- Row 1: Three-column table -->
+              <div class="row">
+                <div class="col-md-4 offset-md-4">
+                  <h4>Insider Sentiments</h4>
+                  <table class="table">
+                    <thead>
+                      <tr>
+                        <th>{{stockData["profile"]?.name}}</th>
+                        <th>MSPR</th>
+                        <th>Change</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <th>Total</th>
+                        <td>{{insightsData["sentiment"]?.mspr_total.toFixed(2)}}</td>
+                        <td>{{insightsData["sentiment"]?.change_total.toFixed(2)}}</td>
+                      </tr>
+                      <tr>
+                        <th>Positive</th>
+                        <td>{{insightsData["sentiment"]?.mspr_positive.toFixed(2)}}</td>
+                        <td>{{insightsData["sentiment"]?.change_positive.toFixed(2)}}</td>
+                      </tr>
+                      <tr>
+                        <th>Negative</th>
+                        <td>{{insightsData["sentiment"]?.mspr_negative.toFixed(2)}}</td>
+                        <td>{{insightsData["sentiment"]?.change_negative.toFixed(2)}}</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+
+              <!-- Row 2: Two columns with charts -->
+              <div class="row">
+                <div class="col-md-6">
+                  <!-- Chart 1 -->
+                  <div class="chart-container">
+
+
+                    <div *ngIf="recommendationChartAvailable; else recommendationChartMissing">
+                      <highcharts-chart [Highcharts]="Highcharts" [options]="recommendationChartOptions"
+                        style="width: 100%; height: 400px; display: block;"></highcharts-chart>
+                    </div>
+                    <ng-template else #recommendationChartMissing>
+                        <div class=" alert alert-danger text-center my-5" role="alert">
+                          Earnings Chart failed to render.
+                        </div>
+                    </ng-template>
+
+                    <!-- Add your chart component here -->
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <!-- Chart 2 -->
+                  <div class="chart-container">
+                      
+                    <div *ngIf="earningsChartAvailable; else earningsChartMissing">
+                        <highcharts-chart [Highcharts]="Highcharts" [options]="earningsChartOptions"
+                        style="width: 100%; height: 400px; display: block;"></highcharts-chart>
+                    </div>
+                    <ng-template else #earningsChartMissing>
+                        <div class=" alert alert-danger text-center my-5" role="alert">
+                          Earnings Chart failed to render.
+                        </div>
+                    </ng-template>
+
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </mat-tab>
+        </mat-tab-group>
+
+      </ng-template>
+
+    </ng-template>
+    
+  </div>
+
+  <!-- <app-footer class="static-bottom"></app-footer> -->

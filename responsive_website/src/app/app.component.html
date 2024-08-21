@@ -1,0 +1,34 @@
+<div class="app-container d-flex flex-column vh-100">
+
+  <nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #092b9d;">
+    <a class="navbar-brand ms-3" routerLink="/search/home">Stock Search</a>
+    <button style="cursor: pointer;" class="navbar-toggler me-2" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+      <ul class="navbar-nav ms-auto me-4" style="cursor: pointer;">
+        <li class="nav-item" (click)="onClick('home')">
+          <a class="nav-link mx-4 mx-md-2 px-md-3 ps-2" [ngClass]="{ 'activeCustom': activeTab === 'home' ? true : false }">Search</a>
+        </li>
+        <li class="nav-item" (click)="onClick('watchlist')">
+          <a class="nav-link mx-4 mx-md-2 px-md-3 ps-2" [ngClass]="{ 'activeCustom': activeTab === 'watchlist' ? true : false }">Watchlist</a>
+        </li>
+        <li class="nav-item" (click)="onClick('portfolio')">
+          <a class="nav-link mx-4 mx-md-2 px-md-3 ps-2" [ngClass]="{ 'activeCustom': activeTab === 'portfolio' ? true : false }">Portfolio</a>
+        </li>
+      </ul>
+    </div>
+  </nav>
+
+  <div style="flex-grow: 1">
+    <router-outlet></router-outlet>  
+  </div>
+
+
+  <footer class="bg-body-tertiary text-center">
+    <div class="text-center p-3" style="background-color: rgba(0, 0, 0, 0.05);">
+      Powered by <a target="_blank" href="https://finnhub.io">Finnhub.io</a>
+    </div>
+  </footer>
+
+</div>

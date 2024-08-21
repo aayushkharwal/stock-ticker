@@ -1,0 +1,17 @@
+.close-button {
+    border: none; /* Remove border */
+    background-color: white; /* White background */
+    padding: 0; /* Remove padding */
+  }
+  
+.close-icon {
+position: relative;
+    font-size: 24px; /* Adjust font size as needed */
+    color: blue; /* Blue color for the "x" symbol */
+}
+
+.close-icon::before {
+    content: '\00D7'; /* Unicode for "x" symbol */
+    text-decoration: underline; /* Underline the "x" symbol */
+}
+  

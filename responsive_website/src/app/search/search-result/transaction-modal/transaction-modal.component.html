@@ -1,0 +1,59 @@
+<mat-dialog-content class="container-fluid">
+  
+  <div class="row">
+    
+    <div class="col-12 d-flex justify-content-between align-items-center">
+      <h3 class="modal-title">{{ stockData['tickerSymbol'] }}</h3>
+      <button mat-button [mat-dialog-close]="true" class="close-button">
+        <span aria-hidden="true" class="close-icon"></span>
+    </button> 
+    </div>
+
+  </div>
+
+  <hr class="bg-secondary">
+
+  <div class="modal-body">
+    <div class="row">
+      <div class="col-12">
+        <p>Current Price: {{stockData['currentPrice']?.toFixed(2)}}</p>
+        <p>Money in Wallet: {{stockData['balance']?.toFixed(2)}}</p>
+        <p>Stocks Owned: {{stockData['quantity']}}</p>
+        
+        <div class="row">
+          <div class="col-12 d-inline-flex">
+            <label>Quantity: </label><input type="number" min="0" class="form-control" [formControl]="quantity" value=0>
+          </div>
+        </div>
+        
+        <div class="row text-danger">
+          <p *ngIf="((stockData['action']==='Buy')&&(quantity.value*stockData['currentPrice']>stockData['balance']))">
+            Not enough money in wallet!
+          </p>
+          <p *ngIf="((stockData['action']==='Sell')&&(quantity.value>stockData['quantity']))">
+            You can't sell stocks you don't have!
+          </p>
+        </div>
+      
+      
+      </div>
+    </div>
+  </div>
+
+  <hr class="bg-secondary">
+
+  <div class="row">
+    <div class="col-8">
+      <p class="mb-0">Total: {{quantity.value?(quantity.value*stockData['currentPrice']).toFixed(2):''}}</p>
+    </div>
+    <div class="col-4 d-flex justify-content-end">
+        <button type="button" class="btn btn-success" (click)="onExecute()"
+          [disabled]="!(quantity.value)||((stockData['action']==='Buy')&&(quantity.value*stockData['currentPrice']>stockData['balance'])||((stockData['action']==='Sell')&&quantity.value>stockData['quantity']))"
+          >
+          {{stockData['action']}}
+        </button>
+    </div>
+  </div>
+
+
+</mat-dialog-content>

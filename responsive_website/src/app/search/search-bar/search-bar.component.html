@@ -1,0 +1,58 @@
+<div class="container">
+
+    <div class="row justify-content-center" style="font-size: 30px;">
+        <div class="col-md-6 py-3" style="font-size: 30px;">
+            <form class="form-inline">
+                <div class="text-center my-4" style="font-size: 30px;">
+                    <label for="search-bar">STOCK SEARCH</label>
+                </div>
+                <div class="my-3 form-group input-group customSearchDiv">
+                    <div class="input-group p-1" >            
+                        <input 
+                            id="search-bar"
+                            type="text" 
+                            class="form-control p-1 customSearchBar" 
+                            placeholder="Enter stock ticker symbol" 
+                            aria-label="Search" 
+                            aria-describedby="search-addon" 
+                            oninput="this.value = this.value.toUpperCase()"  
+                            [formControl]="control"
+                            [matAutocomplete]="auto"  
+                            [value]="ticker"
+                        />
+                        
+                        <mat-autocomplete #auto="matAutocomplete" (optionSelected)="autoCompleteSelected($event)">
+
+                            <mat-option *ngIf="isLoading && this.control.value!==''" class="is-loading">
+                                <mat-spinner diameter="25"></mat-spinner>
+                            </mat-option>
+
+                            @for (option of processedOptions | async; track option) {
+                            <mat-option 
+                                [value]="option['symbol']"
+                                *ngIf="!isLoading && this.control.value!==''">
+                                {{ option['symbol'] }} | {{option['description']}}
+                            </mat-option>
+                            }
+
+                        </mat-autocomplete>
+
+                        <button type="submit" class="customSearchButton" (click)="onSubmit()">
+                            <i class="bi bi-search p-0"></i>
+                        </button>
+
+                        <button type="reset" class="customSearchButton mx-2" (click)="onClear()">
+                            <i class="bi bi-x p-0" ></i>
+                        </button>
+
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div *ngIf="alertDisplay" class="alert alert-danger text-center my-5" role="alert">
+        {{alertMessage}}
+    </div>
+
+</div>

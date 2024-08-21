@@ -1,0 +1,14 @@
+<div class="card h-100" (click)="openModal()" style="background-color: rgba(0, 0, 0, 0.05); height: 100%;">
+    <div class="card-body d-flex flex-column flex-sm-row news-card">
+        <div class="col-md-4 text-center" style="max-height: 200px;">
+            <img [src]="newsCardData['image']" class="img-fluid rounded-2" alt="newsImage" style="height: 150px;">
+        </div>
+        <div class="col-md-8">
+            <div class="card-body d-flex align-items-center justify-content-center h-100">
+            <p class="card-text text-center">
+                {{ newsCardData['headline'] }}
+            </p>
+            </div>
+        </div>
+    </div>
+</div>

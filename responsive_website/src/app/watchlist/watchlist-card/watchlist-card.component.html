@@ -1,0 +1,25 @@
+<div class="card my-3" style="cursor: pointer;">
+
+  <div class="card-body">
+    <span class="px-0" class="close-icon" (click)="removeStock()">
+      <i class="bi bi-x"></i>
+    </span>
+
+    <div class="row" routerLink="/search/{{watchlistedStock['ticker']}}">
+      <div class="col">
+        <h4 class="card-title">{{watchlistedStock['ticker']}}</h4>
+        <h5 class="card-subtitle mb-2">{{watchlistedStock['name']}}</h5>
+      </div>
+      <div class="col" [style.color]="watchlistedStock['d']<0 ? 'red': watchlistedStock['d']>0 ? 'green' : 'black' ">
+        <h4 class="card-text">{{watchlistedStock['c'].toFixed(2)}}</h4>
+        <h5 class="card-text  mb-2">
+          <i class="bi bi-caret-down-fill" *ngIf="watchlistedStock['d'] < 0"></i>
+          <i class="bi bi-caret-up-fill" *ngIf="watchlistedStock['d'] > 0"></i>
+          {{watchlistedStock['d'].toFixed(2)}} ({{watchlistedStock['dp'].toFixed(2)}}%)
+        </h5>
+      </div>
+    </div>  
+
+  </div>
+
+</div>
